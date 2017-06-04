@@ -1,11 +1,8 @@
 package main
 
 import (
-	"bufio"
 	"flag"
-	"fmt"
-	"log"
-	"net"
+	"mychat/lib"
 	"os"
 )
 
@@ -16,36 +13,9 @@ func main() {
 
 	if isHost {
 		connIP := os.Args[2]
-		runHost(connIP)
+		lib.RunHost(connIP)
 	} else {
 		connIP := os.Args[1]
-		runGuest(connIP)
+		lib.RunGuest(connIP)
 	}
-}
-
-const port = "8080"
-
-func runHost(ip string) {
-	ipAndPort := ip + ":" + port
-	listener, listenErr := net.Listen("tcp", ipAndPort)
-
-	if listenErr != nil {
-		log.Fatal("Error ", listenErr)
-	}
-
-	conn, acceptErr := listener.Accept()
-	if acceptErr != nil {
-		log.Fatal("Error: ", acceptErr)
-	}
-
-	reader := bufio.NewReader(conn)
-	message, readErr := reader.ReadString('\n')
-	if readErr != nil {
-		log.Fatal("Error ", readErr)
-	}
-	fmt.Println("Message recieved: ", message)
-}
-
-func runGuest(ip string) {
-
 }
